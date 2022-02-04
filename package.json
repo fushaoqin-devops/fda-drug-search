@@ -5,7 +5,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cypress": "cypress open"
   },
   "dependencies": {
     "@prisma/client": "^3.9.0",
@@ -13,12 +14,14 @@
     "next-themes": "^0.0.15",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "tw-elements": "^1.0.0-alpha10"
+    "tw-elements": "^1.0.0-alpha10",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/node": "17.0.14",
     "@types/react": "17.0.38",
     "autoprefixer": "^10.4.2",
+    "cypress": "^9.4.1",
     "eslint": "8.8.0",
     "eslint-config-next": "12.0.10",
     "postcss": "^8.4.5",
