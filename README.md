@@ -31,6 +31,17 @@
   - Viewing data: npx prisma studio
 
 - Running Local Development
+
   - npm run dev
   - [http://localhost:3000](http://localhost:3000).
   - Reference [Next.js Documentation](https://nextjs.org/docs) for features and API.
+
+  ## Dev Workflow
+
+  - Checkout a local feature branch
+    - git checkout -b <name>-<shortDescription>
+  - Save changes and push to remote feature branch
+    - git add . && git commit "commit description"
+    - git push origin <feature-branch-name> (Add -u after push to set up upstream so can use git push later instead)
+  - Create a PR
+  - Merge if approved
