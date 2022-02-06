@@ -39,7 +39,7 @@
   ## Dev Workflow
 
   - Checkout a local feature branch
-    - git checkout -b <name>-<shortDescription>
+    - git checkout -b <name-shortDescription>
   - Save changes and push to remote feature branch
     - git add . && git commit "commit description"
     - git push origin <feature-branch-name> (Add -u after push to set up upstream so can use git push later instead)
