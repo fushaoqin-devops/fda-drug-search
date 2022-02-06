@@ -42,7 +42,7 @@ jobs:
           - 5432:5432
 
     env:
-      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/fda_drug?schema=public
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres?schema=public
     steps:
       - name: Checkout
         uses: actions/checkout@v2
