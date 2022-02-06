@@ -31,21 +31,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Use Node.js 14
-        uses: actions/setup-node@v2
-        with:
-          node-version: 14
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm build
-
-      - name: Test with Cypress
+      - name: Test with cypress
         uses: cypress-io/github-action@v2
         with:
+          build: npm build
           start: npm start
           wait-on: "http://localhost:3000"
 
