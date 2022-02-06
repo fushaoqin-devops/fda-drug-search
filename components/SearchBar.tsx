@@ -79,9 +79,9 @@ const SearchBar = ({ productList }: Products) => {
   return (
     <div className="flex justify-center">
       <div className="mb-3 xl:w-96">
-        <div className="input-group relative flex flex-wrap items-stretch w-full">
+        <div className="input-group relative flex w-full flex-wrap items-stretch">
           <input
-            className="form-control relative flex-auto min-w-0 block w-full px-3 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-100 focus:outline-none"
+            className="form-control relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-100 focus:bg-white focus:text-gray-700 focus:outline-none"
             placeholder="Search"
             aria-label="Search"
             onChange={onChange}
@@ -89,7 +89,7 @@ const SearchBar = ({ productList }: Products) => {
             value={input}
           ></input>
           <button
-            className="btn btn-search disabled:opacity-50 inline-block px-6 py-2.5 bg-blue-400 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700  focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out flex items-center"
+            className="btn-search btn inline-block flex items-center rounded bg-blue-400 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150  ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg disabled:opacity-50"
             type="button"
             onClick={handleSearch}
             disabled={!input}
@@ -107,13 +107,13 @@ const SearchBar = ({ productList }: Products) => {
           </button>
         </div>
         {suggestions?.length ? (
-          <ul className="shadow-md bg-white rounded max-h-40 overflow-y-auto overflow-x-hidden w-80">
+          <ul className="max-h-40 w-80 overflow-y-auto overflow-x-hidden rounded bg-white shadow-md">
             {suggestions?.map((suggestion, idx) => {
               return (
                 <Link key={idx} href={`/product/${suggestion.id}`} passHref>
                   <li
                     key={idx}
-                    className="hover:bg-blue-50 py-2 px-3 text-slate-900 cursor-pointer text-xs"
+                    className="cursor-pointer py-2 px-3 text-xs text-slate-900 hover:bg-blue-50"
                   >
                     {suggestion.name}
                   </li>
