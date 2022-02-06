@@ -59,7 +59,7 @@ jobs:
       - run: npx prisma db push
       - run: npx prisma generate
       - run: npm run build
-      - run: npm start & wait-on http://localhost:3000
+      - run: npm start & npx wait-on http://localhost:3000
       - run: npm run test
 
   # prettier:
