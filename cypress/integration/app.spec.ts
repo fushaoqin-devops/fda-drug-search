@@ -14,6 +14,7 @@ describe("App", () => {
   });
 
   it("should default to light theme icon", () => {
+    cy.get("html").should("have.class", "dark");
     cy.get(".theme-icon")
       .invoke("attr", "src")
       .then((src) => {
