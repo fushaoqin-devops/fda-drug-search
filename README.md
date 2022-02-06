@@ -24,7 +24,7 @@
   - npm ci
 - Prisma basic operations (Details here: https://www.prisma.io/docs)
 
-  - Create a .env file with key value pair: DATABASE_URL:"postgresql://<user_name>:<password>@localhost:5432/<db_name>?schema=public"
+  - Create a .env file with key value pair: DATABASE_URL:"postgresql://<user_name>:<your_password>@localhost:5432/<db_name>?schema=public"
   - Pull schema from db (if changes made in db from psql cli): npx prisma db pull
   - Push schema from prisma (if changes made in schema.prisma file): npx prism db push
   - Generate client: npx prisma generate
@@ -39,7 +39,7 @@
 ## Dev Workflow
 
 - Checkout a local feature branch
-- git checkout -b name-shortDescription
+- git checkout -b <your_name>-<short_description>
 - Save changes and push to remote feature branch
 - git add . && git commit "commit description"
 - git push origin <feature-branch-name> (Add -u after push to set up upstream so can use git push later instead)
