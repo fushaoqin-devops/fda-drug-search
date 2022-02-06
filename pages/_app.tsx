@@ -12,7 +12,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="author" content="ISTE 612 team 5" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
-      <ThemeProvider attribute="class">
+      <ThemeProvider attribute="class" enableSystem={false}>
         <Component {...pageProps} />
       </ThemeProvider>
     </div>

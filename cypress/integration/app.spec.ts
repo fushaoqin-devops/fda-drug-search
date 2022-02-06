@@ -1,11 +1,12 @@
 /// <reference types="cypress" />
 import { v4 as uuid } from "uuid";
 describe("App", () => {
-  beforeEach(() => {
-    cy.visit("/");
-  });
+  // beforeEach(() => {
+  //   cy.visit("/");
+  // });
 
   it("should get the document object", () => {
+    cy.visit("/");
     cy.document().should("have.property", "charset").and("eq", "UTF-8");
   });
 
@@ -14,21 +15,13 @@ describe("App", () => {
   });
 
   it("should default to light theme icon", () => {
+    cy.get(".theme-icon").should("be.visible");
     cy.get("html").should("have.class", "light");
-    cy.get(".theme-icon")
-      .invoke("attr", "src")
-      .then((src) => {
-        expect(src).to.includes("sun.svg");
-      });
   });
 
   it("should change to dark theme", () => {
     cy.get(".theme-icon").click();
-    cy.get(".theme-icon")
-      .invoke("attr", "src")
-      .then((src) => {
-        expect(src).to.includes("moon.svg");
-      });
+    cy.get(".theme-icon").should("be.visible");
     cy.get("html").should("have.class", "dark");
   });
 

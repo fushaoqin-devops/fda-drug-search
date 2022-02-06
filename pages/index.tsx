@@ -48,7 +48,7 @@ const Home: NextPage<Products> = (props: Products) => {
             src={theme === "dark" ? "/moon.svg" : "/sun.svg"}
             width="100%"
             height="100%"
-            alt="dark theme icon"
+            alt="theme icon"
             className="theme-icon"
           ></Image>
         </button>
