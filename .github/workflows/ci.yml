@@ -43,6 +43,7 @@ jobs:
       - name: Test with Cypress
         uses: cypress-io/github-action@v2
         with:
+          build: npm build
           start: npm start
 
   prettier:
