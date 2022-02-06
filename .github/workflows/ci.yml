@@ -54,8 +54,9 @@ jobs:
           cache: "npm"
 
       - run: npm ci
-      - run: npm run build
       - run: npx prisma db push
+      - run: npx prisma generate
+      - run: npm run build
       - run: npm start & wait-on http://localhost:3000
       - run: npm run test
 
