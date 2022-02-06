@@ -4,7 +4,7 @@ on:
     branches:
       - main
 
-  jobs:
+jobs:
   #   linting:
   #     name: Linting
   #     runs-on: ubuntu-latest
