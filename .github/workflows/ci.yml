@@ -27,16 +27,37 @@ jobs:
   testing:
     name: Testing
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@local:5432/fda_drug?schema=public
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Test with cypress
-        uses: cypress-io/github-action@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2
         with:
-          build: npm run build
-          start: npm start
-          wait-on: "http://localhost:3000"
+          node-version: 14
+          cache: "npm"
+
+      - run: npm ci
+      - run: npm run build
+      - run: npx prisma db push
+      - run: npm start & wait-on http://localhost:8080
+      - run: npm run test
 
   prettier:
     name: Prettier
