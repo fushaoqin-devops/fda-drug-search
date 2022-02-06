@@ -55,7 +55,7 @@ jobs:
 
       - run: npm ci
       - run: |
-          PGPASSWORD=postgres psql -h 0.0.0.0 -U postgres -tc "CREATE EXTENSION IF NOT EXISTS $uuid-ossp$"
+          PGPASSWORD=postgres psql -h 0.0.0.0 -U postgres -tc "CREATE EXTENSION IF NOT EXISTS \'uuid-ossp\'"
       - run: npx prisma db push
       - run: npx prisma generate
       - run: npm run build
