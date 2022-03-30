@@ -1,80 +1,57 @@
-import { products } from "@prisma/client";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
-export interface Products {
-  productList: products[];
-}
+const VSM_SIZE = 5693;
 
-const SearchBar = ({ productList }: Products) => {
-  const [suggestions, setSuggestions] = useState<products[]>([]);
+const SearchBar = () => {
+  // const [suggestions, setSuggestions] = useState<products[]>([]);
   const [input, setInput] = useState("");
-  const [matchCount, setMatchCount] = useState(new Map());
-  const [exactMatch, setExactMatch] = useState("");
   const router = useRouter();
+  const weightedProducts = new Map();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
 
-  // TODO: Do some research on search optimization and improve the current algorithm
-  const filterSuggestion = () => {
-    const filtered = input === "" ? [] : productList.filter(fuzzSearch);
-    filtered.sort(sortBySimilarity);
+  const filterSuggestion = () => {};
 
-    setSuggestions(filtered.slice(0, 10));
-    setMatchCount(new Map());
+  const handleSearch = async () => {
+    // await rankSearch();
   };
 
-  // Update idx of matched characters of each product name
-  const fuzzSearch = (product: products) => {
-    const name = product.name.trim().toLowerCase();
-    const currInput = input.trim().toLowerCase();
-    if (name === currInput) {
-      setExactMatch(product.id);
-    }
-    // loop through each character and keep a map between each name and array of matched indexes
-    for (var i = 0; i < input.length; i++) {
-      const c = currInput.charAt(i);
-      const idx = name.indexOf(c);
-      if (idx === -1) continue;
-      if (!matchCount.get(name)) {
-        setMatchCount(matchCount.set(name, [idx]));
-      } else {
-        const idxArray = matchCount.get(name);
-        if (!idxArray.includes(idx)) {
-          idxArray.push(idx);
-          setMatchCount(matchCount.set(name, idxArray));
-        }
-      }
-    }
-    return matchCount.get(name)?.length > 0 ? true : false;
-  };
+  // const rankSearch = async () => {
+  //   const query: string[] = input.toLowerCase().split(" ");
+  //   let qMagnitude: number = 0;
 
-  // Sort product names based on number of matched characters
-  const sortBySimilarity = (a: products, b: products) => {
-    const numMatchedA = matchCount.get(a.name.trim().toLowerCase()).length;
-    const numMatchedB = matchCount.get(b.name.trim().toLowerCase()).length;
-    // In case of same number of matched characters, name with higher percentage of match is ranked higher
-    if (numMatchedA === numMatchedB) {
-      return (
-        a.name.trim().toLowerCase().length - b.name.trim().toLowerCase().length
-      );
-    }
-    return numMatchedB - numMatchedA;
-  };
+  //   for (const q of query) {
+  //     const token = await prisma.vsm.findUnique({
+  //       where: { name: q },
+  //     });
+  //     if (!token) continue;
+  //     const products: string[] = token.products.split(";");
+  //     const qtfidf =
+  //       ((1 + Math.log10(1)) * Math.log10(VSM_SIZE * 1.0)) / products.length;
+  //     qMagnitude += Math.pow(qtfidf, 2);
 
-  const handleSearch = () => {
-    if (exactMatch !== "") {
-      router.push(`/product/${exactMatch}`);
-    } else if (suggestions.length !== 0) {
-      router.push(`/product/${suggestions[0].id}`);
-    } else {
-      router.push(`/product/404`);
-    }
-  };
+  //     for (const p of products) {
+  //       const tokenMagnitude = parseFloat(token.normalize + "");
+  //       const productId = uuidParse(p.split(",")[0]);
+  //       const tokenWeight = parseFloat(p.split(",")[1]);
+  //       const score = (qtfidf * tokenWeight) / tokenMagnitude;
+  //       if (weightedProducts.has(productId)) {
+  //         weightedProducts.set(
+  //           productId,
+  //           weightedProducts.get(productId) + score
+  //         );
+  //       } else {
+  //         weightedProducts.set(productId, score);
+  //       }
+  //     }
+  //   }
+  //   qMagnitude = Math.sqrt(qMagnitude);
+  //   console.log(weightedProducts);
+  // };
 
   return (
     <div className="flex justify-center">
@@ -106,7 +83,7 @@ const SearchBar = ({ productList }: Products) => {
             ></Image>
           </button>
         </div>
-        {suggestions?.length ? (
+        {/* {suggestions?.length ? (
           <ul className="max-h-40 w-80 overflow-y-auto overflow-x-hidden rounded bg-white shadow-md">
             {suggestions?.map((suggestion, idx) => {
               return (
@@ -123,7 +100,7 @@ const SearchBar = ({ productList }: Products) => {
           </ul>
         ) : (
           <div></div>
-        )}
+        )} */}
       </div>
     </div>
   );

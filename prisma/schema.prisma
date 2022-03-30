@@ -8,13 +8,21 @@ datasource db {
 }
 
 model ingredients {
-  id           String  @id @db.Uuid
-  name         String? @unique @db.VarChar(255)
-  product_name String?
+  id       String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name     String  @db.VarChar(50)
+  products String?
 }
 
 model products {
   id          String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
-  name        String  @unique
+  name        String  @db.VarChar(100)
+  review      String?
   ingredients String?
+}
+
+model vsm {
+  id        String  @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name      String  @unique @db.VarChar(50)
+  normalize Decimal @db.Decimal
+  products  String
 }

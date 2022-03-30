@@ -1,22 +1,20 @@
-import { products } from "@prisma/client";
-import type { GetStaticProps, NextPage } from "next";
+import type { NextPage } from "next";
 import { useTheme } from "next-themes";
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar";
-import prisma from "../db/prisma";
 
-export interface Products {
-  productList: products[];
-}
+// export interface Products {
+//   productList: products[];
+// }
 
-export const getStaticProps: GetStaticProps = async () => {
-  const productList = await prisma.products.findMany();
-  return { props: { productList } };
-};
+// export const getStaticProps: GetStaticProps = async () => {
+//   const productList = await prisma.products.findMany();
+//   return { props: { productList } };
+// };
 
-const Home: NextPage<Products> = (props: Products) => {
+const Home: NextPage = () => {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -56,7 +54,7 @@ const Home: NextPage<Products> = (props: Products) => {
       <h1 className="py-24 text-center text-6xl font-bold tracking-tight text-slate-900 dark:text-gray-200">
         Affordable FDA Drug Alternative
       </h1>
-      <SearchBar productList={props.productList} />
+      <SearchBar />
     </div>
   );
 };
