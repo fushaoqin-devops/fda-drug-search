@@ -1,11 +1,28 @@
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
+import BeatLoader from "react-spinners/BeatLoader";
 
 const VSM_SIZE = 5693;
 
+interface VSMToken {
+  _id: string;
+  name: string;
+  magnitude: number;
+  products: string;
+}
+
+interface Suggestion {
+  id: string;
+  name: string;
+  score: number;
+}
+
 const SearchBar = () => {
-  // const [suggestions, setSuggestions] = useState<products[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [input, setInput] = useState("");
   const router = useRouter();
   const weightedProducts = new Map();
@@ -17,46 +34,59 @@ const SearchBar = () => {
   const filterSuggestion = () => {};
 
   const handleSearch = async () => {
-    // await rankSearch();
+    setLoading(true);
+    await rankSearch();
+    setLoading(false);
+    setShowSuggestions(true);
   };
 
-  // const rankSearch = async () => {
-  //   const query: string[] = input.toLowerCase().split(" ");
-  //   let qMagnitude: number = 0;
+  const rankSearch = async () => {
+    const query: string[] = input.toLowerCase().split(" ");
+    let qMagnitude: number = 0;
 
-  //   for (const q of query) {
-  //     const token = await prisma.vsm.findUnique({
-  //       where: { name: q },
-  //     });
-  //     if (!token) continue;
-  //     const products: string[] = token.products.split(";");
-  //     const qtfidf =
-  //       ((1 + Math.log10(1)) * Math.log10(VSM_SIZE * 1.0)) / products.length;
-  //     qMagnitude += Math.pow(qtfidf, 2);
+    for (const q of query) {
+      const token: VSMToken = await fetch(`/api/vsm/${q}`)
+        .then((res) => res.json())
+        .then((data) => {
+          return data;
+        });
+      if (!token) continue;
+      const products: string[] = token.products.split(";");
+      const qtfidf =
+        ((1 + Math.log10(1)) * Math.log10(VSM_SIZE * 1.0)) / products.length;
+      qMagnitude += Math.pow(qtfidf, 2);
 
-  //     for (const p of products) {
-  //       const tokenMagnitude = parseFloat(token.normalize + "");
-  //       const productId = uuidParse(p.split(",")[0]);
-  //       const tokenWeight = parseFloat(p.split(",")[1]);
-  //       const score = (qtfidf * tokenWeight) / tokenMagnitude;
-  //       if (weightedProducts.has(productId)) {
-  //         weightedProducts.set(
-  //           productId,
-  //           weightedProducts.get(productId) + score
-  //         );
-  //       } else {
-  //         weightedProducts.set(productId, score);
-  //       }
-  //     }
-  //   }
-  //   qMagnitude = Math.sqrt(qMagnitude);
-  //   console.log(weightedProducts);
-  // };
+      for (const p of products) {
+        const tokenMagnitude = token.magnitude;
+        const productId = p.split(",")[0];
+        if (!productId) continue;
+        const productName = await fetch(`/api/product/${productId}`)
+          .then((res) => res.json())
+          .then((data) => data?.name);
+        const tokenWeight = parseFloat(p.split(",")[1]);
+        const score = (qtfidf * tokenWeight) / tokenMagnitude;
+        if (weightedProducts.has(productId)) {
+          weightedProducts.set(productId, {
+            name: productName,
+            score: weightedProducts.get(productId) + score,
+          });
+        } else {
+          weightedProducts.set(productId, { name: productName, score: score });
+        }
+      }
+    }
+    const suggestionList: Suggestion[] = [];
+    qMagnitude = Math.sqrt(qMagnitude);
+    weightedProducts.forEach((value, key) => {
+      suggestionList.push({ id: key, name: value.name, score: value.score });
+    });
+    setSuggestions(suggestionList);
+  };
 
   return (
-    <div className="flex justify-center">
-      <div className="mb-3 xl:w-96">
-        <div className="input-group relative flex w-full flex-wrap items-stretch">
+    <div className="flex-col items-center justify-center">
+      <div className="m-auto w-1/3">
+        <div className="input-group relative flex flex-wrap items-stretch">
           <input
             className="form-control relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-100 focus:bg-white focus:text-gray-700 focus:outline-none"
             placeholder="Search"
@@ -83,9 +113,11 @@ const SearchBar = () => {
             ></Image>
           </button>
         </div>
-        {/* {suggestions?.length ? (
-          <ul className="max-h-40 w-80 overflow-y-auto overflow-x-hidden rounded bg-white shadow-md">
-            {suggestions?.map((suggestion, idx) => {
+      </div>
+      {showSuggestions && suggestions.length > 0 ? (
+        <div className="mb-50 m-auto w-1/3">
+          <ul>
+            {suggestions.map((suggestion, idx) => {
               return (
                 <Link key={idx} href={`/product/${suggestion.id}`} passHref>
                   <li
@@ -98,10 +130,12 @@ const SearchBar = () => {
               );
             })}
           </ul>
-        ) : (
-          <div></div>
-        )} */}
-      </div>
+        </div>
+      ) : (
+        <div className="flex h-[300px] items-center justify-center">
+          <BeatLoader color={"#bbf7d0"} loading={loading} size={50} />
+        </div>
+      )}
     </div>
   );
 };

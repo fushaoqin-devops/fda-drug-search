@@ -5,15 +5,6 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import SearchBar from "../components/SearchBar";
 
-// export interface Products {
-//   productList: products[];
-// }
-
-// export const getStaticProps: GetStaticProps = async () => {
-//   const productList = await prisma.products.findMany();
-//   return { props: { productList } };
-// };
-
 const Home: NextPage = () => {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
