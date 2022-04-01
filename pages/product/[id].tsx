@@ -1,13 +1,24 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { useEffect, useState } from "react";
+import { GetServerSidePropsContext } from "next";
+import { useState } from "react";
 
-export default function Product({
-  p,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+interface Product {
+  name: string;
+  reviews: string[];
+  ingredients: Ingredient[];
+}
+
+interface Ingredient {
+  id: string;
+  name: string;
+}
+
+interface MyProps {
+  p: Product;
+}
+
+export default function Product({ p }: MyProps) {
   const [checked, setChecked] = useState([]);
-  useEffect(() => {
-    console.log(p.ingredients);
-  }, []);
+
   const handleChange = (id: string) => {
     // TODO: handle check boxes
   };

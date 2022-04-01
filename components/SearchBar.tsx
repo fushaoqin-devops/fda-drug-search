@@ -18,6 +18,12 @@ interface Suggestion {
   score: number;
 }
 
+interface EditDistanceMatch {
+  id: string;
+  name: string;
+  dist: number;
+}
+
 const SearchBar = () => {
   const [loading, setLoading] = useState(false);
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
@@ -25,7 +31,7 @@ const SearchBar = () => {
   const [input, setInput] = useState("");
   const weightedProducts = new Map();
   const [showCloseMatch, setShowCloseMatch] = useState(false);
-  const [closeMatch, setCloseMatch] = useState([]);
+  const [closeMatch, setCloseMatch] = useState<EditDistanceMatch[]>([]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
