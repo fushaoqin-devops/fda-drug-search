@@ -31,7 +31,7 @@ export default async function handler(
     pList.sort((a, b) => (a.dist > b.dist ? 1 : -1));
     res.status(200).json(JSON.stringify(pList.slice(0, 3)));
   } catch (error) {
-    res.status(400).json(JSON.stringify(error.message));
+    res.status(400).json(JSON.stringify((error as any).message));
   }
 }
 
