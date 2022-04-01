@@ -3,6 +3,10 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import "../styles/globals.css";
 
+declare global {
+  var mongoose: any;
+}
+
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div>

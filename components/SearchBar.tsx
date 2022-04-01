@@ -1,85 +1,130 @@
-import { products } from "@prisma/client";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React, { useState } from "react";
+import BeatLoader from "react-spinners/BeatLoader";
 
-export interface Products {
-  productList: products[];
+const VSM_SIZE = 5693;
+
+interface VSMToken {
+  _id: string;
+  name: string;
+  magnitude: number;
+  products: string;
 }
 
-const SearchBar = ({ productList }: Products) => {
-  const [suggestions, setSuggestions] = useState<products[]>([]);
+interface Suggestion {
+  id: string;
+  name: string;
+  score: number;
+}
+
+const SearchBar = () => {
+  const [loading, setLoading] = useState(false);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [input, setInput] = useState("");
-  const [matchCount, setMatchCount] = useState(new Map());
-  const [exactMatch, setExactMatch] = useState("");
-  const router = useRouter();
+  const weightedProducts = new Map();
+  const [showCloseMatch, setShowCloseMatch] = useState(false);
+  const [closeMatch, setCloseMatch] = useState([]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
   };
 
-  // TODO: Do some research on search optimization and improve the current algorithm
-  const filterSuggestion = () => {
-    const filtered = input === "" ? [] : productList.filter(fuzzSearch);
-    filtered.sort(sortBySimilarity);
+  const filterSuggestion = () => {};
 
-    setSuggestions(filtered.slice(0, 10));
-    setMatchCount(new Map());
+  const handleSearch = async () => {
+    setLoading(true);
+    await rankSearch();
+    setLoading(false);
+    setShowSuggestions(true);
   };
 
-  // Update idx of matched characters of each product name
-  const fuzzSearch = (product: products) => {
-    const name = product.name.trim().toLowerCase();
-    const currInput = input.trim().toLowerCase();
-    if (name === currInput) {
-      setExactMatch(product.id);
-    }
-    // loop through each character and keep a map between each name and array of matched indexes
-    for (var i = 0; i < input.length; i++) {
-      const c = currInput.charAt(i);
-      const idx = name.indexOf(c);
-      if (idx === -1) continue;
-      if (!matchCount.get(name)) {
-        setMatchCount(matchCount.set(name, [idx]));
-      } else {
-        const idxArray = matchCount.get(name);
-        if (!idxArray.includes(idx)) {
-          idxArray.push(idx);
-          setMatchCount(matchCount.set(name, idxArray));
+  const rankSearch = async () => {
+    const query: string[] = input.toLowerCase().split(" ");
+    let qMagnitude: number = 0;
+
+    for (const q of query) {
+      const token: VSMToken = await fetch(`/api/vsm/${q}`)
+        .then((res) => res.json())
+        .then((data) => {
+          return data;
+        });
+      if (!token) continue;
+      const products: string[] = token.products.split(";");
+      const qtfidf =
+        ((1 + Math.log10(1)) * Math.log10(VSM_SIZE * 1.0)) / products.length;
+      qMagnitude += Math.pow(qtfidf, 2);
+
+      for (const p of products) {
+        const tokenMagnitude = token.magnitude;
+        const productId = p.split(",")[0];
+        if (!productId) continue;
+        const productName = await fetch(`/api/product/${productId}`)
+          .then((res) => res.json())
+          .then((data) => data?.name);
+        const tokenWeight = parseFloat(p.split(",")[1]);
+        const score = (qtfidf * tokenWeight) / tokenMagnitude;
+        if (weightedProducts.has(productId)) {
+          weightedProducts.set(productId, {
+            name: productName,
+            score: weightedProducts.get(productId) + score,
+          });
+        } else {
+          weightedProducts.set(productId, { name: productName, score: score });
         }
       }
     }
-    return matchCount.get(name)?.length > 0 ? true : false;
-  };
-
-  // Sort product names based on number of matched characters
-  const sortBySimilarity = (a: products, b: products) => {
-    const numMatchedA = matchCount.get(a.name.trim().toLowerCase()).length;
-    const numMatchedB = matchCount.get(b.name.trim().toLowerCase()).length;
-    // In case of same number of matched characters, name with higher percentage of match is ranked higher
-    if (numMatchedA === numMatchedB) {
-      return (
-        a.name.trim().toLowerCase().length - b.name.trim().toLowerCase().length
-      );
+    const suggestionList: Suggestion[] = [];
+    if (weightedProducts.size == 0) {
+      editDistance();
     }
-    return numMatchedB - numMatchedA;
+    qMagnitude = Math.sqrt(qMagnitude);
+    weightedProducts.forEach((value, key) => {
+      suggestionList.push({ id: key, name: value.name, score: value.score });
+    });
+
+    setSuggestions(suggestionList);
   };
 
-  const handleSearch = () => {
-    if (exactMatch !== "") {
-      router.push(`/product/${exactMatch}`);
-    } else if (suggestions.length !== 0) {
-      router.push(`/product/${suggestions[0].id}`);
-    } else {
-      router.push(`/product/404`);
+  const editDistance = async () => {
+    console.log(input);
+    const res = await fetch(`api/product/editDistance`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ qString: input }),
+    }).then((res) => res.json());
+    if (res) {
+      setShowCloseMatch(true);
+      setCloseMatch(res);
     }
   };
 
   return (
-    <div className="flex justify-center">
-      <div className="mb-3 xl:w-96">
-        <div className="input-group relative flex w-full flex-wrap items-stretch">
+    <div className="flex-col items-center justify-center">
+      {showCloseMatch && closeMatch.length > 0 ? (
+        <div className="mb-50 m-auto w-1/3">
+          <ul>
+            Did you mean:
+            {closeMatch.map((match, idx) => {
+              return (
+                <Link key={idx} href={`/product/${match.id}`} passHref>
+                  <div className="red inline-block cursor-pointer pl-2 text-red-500 underline">
+                    {idx > 0 ? "," : ""} {match.name}
+                  </div>
+                </Link>
+              );
+            })}
+            ?
+          </ul>
+        </div>
+      ) : (
+        <></>
+      )}
+      <div className="m-auto w-1/3">
+        <div className="input-group relative flex flex-wrap items-stretch">
           <input
             className="form-control relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-100 focus:bg-white focus:text-gray-700 focus:outline-none"
             placeholder="Search"
@@ -106,9 +151,11 @@ const SearchBar = ({ productList }: Products) => {
             ></Image>
           </button>
         </div>
-        {suggestions?.length ? (
-          <ul className="max-h-40 w-80 overflow-y-auto overflow-x-hidden rounded bg-white shadow-md">
-            {suggestions?.map((suggestion, idx) => {
+      </div>
+      {showSuggestions && suggestions.length > 0 ? (
+        <div className="mb-50 m-auto w-1/3">
+          <ul>
+            {suggestions.map((suggestion, idx) => {
               return (
                 <Link key={idx} href={`/product/${suggestion.id}`} passHref>
                   <li
@@ -121,10 +168,12 @@ const SearchBar = ({ productList }: Products) => {
               );
             })}
           </ul>
-        ) : (
-          <div></div>
-        )}
-      </div>
+        </div>
+      ) : (
+        <div className="flex h-[300px] items-center justify-center">
+          <BeatLoader color={"#bbf7d0"} loading={loading} size={50} />
+        </div>
+      )}
     </div>
   );
 };
