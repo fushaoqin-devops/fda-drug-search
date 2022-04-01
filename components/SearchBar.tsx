@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import React, { useState } from "react";
 import BeatLoader from "react-spinners/BeatLoader";
 
@@ -24,8 +23,9 @@ const SearchBar = () => {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [input, setInput] = useState("");
-  const router = useRouter();
   const weightedProducts = new Map();
+  const [showCloseMatch, setShowCloseMatch] = useState(false);
+  const [closeMatch, setCloseMatch] = useState([]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInput(e.target.value);
@@ -76,15 +76,53 @@ const SearchBar = () => {
       }
     }
     const suggestionList: Suggestion[] = [];
+    if (weightedProducts.size == 0) {
+      editDistance();
+    }
     qMagnitude = Math.sqrt(qMagnitude);
     weightedProducts.forEach((value, key) => {
       suggestionList.push({ id: key, name: value.name, score: value.score });
     });
+
     setSuggestions(suggestionList);
+  };
+
+  const editDistance = async () => {
+    console.log(input);
+    const res = await fetch(`api/product/editDistance`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ qString: input }),
+    }).then((res) => res.json());
+    if (res) {
+      setShowCloseMatch(true);
+      setCloseMatch(res);
+    }
   };
 
   return (
     <div className="flex-col items-center justify-center">
+      {showCloseMatch && closeMatch.length > 0 ? (
+        <div className="mb-50 m-auto w-1/3">
+          <ul>
+            Did you mean:
+            {closeMatch.map((match, idx) => {
+              return (
+                <Link key={idx} href={`/product/${match.id}`} passHref>
+                  <div className="red inline-block cursor-pointer pl-2 text-red-500 underline">
+                    {idx > 0 ? "," : ""} {match.name}
+                  </div>
+                </Link>
+              );
+            })}
+            ?
+          </ul>
+        </div>
+      ) : (
+        <></>
+      )}
       <div className="m-auto w-1/3">
         <div className="input-group relative flex flex-wrap items-stretch">
           <input
