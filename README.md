@@ -1,6 +1,9 @@
-##Installing Mongodb Atlas to use the database server
+## Installing Mongodb Atlas to use the database server
 - https://www.mongodb.com/try/download download appropriate installation file for Mongodb Atlas according to your system specifications and setup Atlas with your username and password.
-- Open terminal and run DATABASE_URL=“mongodb+srv://yourName:YourPassword@cluster0.p2buc.mongodb.net/fda_drug?retryWrites=true&w=majority”
+
+## Creating a .env file which will interface with the Mongodb Cluster on Atlas.
+- Open a text editor and save the two commands as ".env" in your repository folder, use your Atlas username and password.
+- DATABASE_URL=“mongodb+srv://yourName:YourPassword@cluster0.p2buc.mongodb.net/fda_drug?retryWrites=true&w=majority”
 - BASE_URL=“http://localhost:3000”
 
 ## Running Local Development
