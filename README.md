@@ -1,6 +1,10 @@
-## Running Local Development
+##Installing Mongodb Atlas to use the database server
+- https://www.mongodb.com/try/download download appropriate installation file for Mongodb Atlas according to your system specifications and setup Atlas with your username and password.
+- Open terminal and run DATABASE_URL=“mongodb+srv://yourName:YourPassword@cluster0.p2buc.mongodb.net/fda_drug?retryWrites=true&w=majority”
+- BASE_URL=“http://localhost:3000”
 
-- npm run dev
+## Running Local Development
+Open a terminal inside your project repository and run the following commands
 - [http://localhost:3000](http://localhost:3000).
 - Reference [Next.js Documentation](https://nextjs.org/docs) for features and API.
 
