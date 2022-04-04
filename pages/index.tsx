@@ -21,7 +21,7 @@ const Home: NextPage = () => {
   if (!mounted) return null;
 
   return (
-    <div className="h-screen bg-gray-200 dark:bg-slate-900">
+    <div className="h-screen bg-gray-200 dark:bg-slate-700">
       <Head>
         <title>Home - FDA Drug Alternative</title>
         <meta name="description" content="FDA drug search engine" />

@@ -132,7 +132,7 @@ const SearchBar = () => {
       <div className="m-auto w-1/3">
         <div className="input-group relative flex flex-wrap items-stretch">
           <input
-            className="form-control relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-100 focus:bg-white focus:text-gray-700 focus:outline-none"
+            className="form-control relative m-0 block w-full min-w-0 flex-auto rounded border border-solid border-gray-300 bg-zinc-50 bg-clip-padding px-3 text-base font-normal text-gray-700 transition ease-in-out focus:border-purple-200 focus:bg-white focus:text-gray-700 focus:outline-none"
             placeholder="Search"
             aria-label="Search"
             onChange={onChange}
@@ -140,7 +140,7 @@ const SearchBar = () => {
             value={input}
           ></input>
           <button
-            className="btn-search btn inline-block flex items-center rounded bg-blue-400 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150  ease-in-out hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg disabled:opacity-50"
+            className="btn-search btn inline-block flex items-center rounded bg-indigo-500 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out  hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg disabled:opacity-50 dark:bg-indigo-300"
             type="button"
             onClick={handleSearch}
             disabled={!input}
@@ -177,7 +177,7 @@ const SearchBar = () => {
         </div>
       ) : (
         <div className="flex h-[300px] items-center justify-center">
-          <BeatLoader color={"#bbf7d0"} loading={loading} size={50} />
+          <BeatLoader color={"#a5b4fc"} loading={loading} size={50} />
         </div>
       )}
     </div>
