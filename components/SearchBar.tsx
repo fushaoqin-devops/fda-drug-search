@@ -40,6 +40,8 @@ const SearchBar = () => {
   const filterSuggestion = () => {};
 
   const handleSearch = async () => {
+    setCloseMatch([]);
+    setSuggestions([]);
     setLoading(true);
     await rankSearch();
     setLoading(false);
@@ -177,7 +179,7 @@ const SearchBar = () => {
         </div>
       ) : (
         <div className="flex h-[300px] items-center justify-center">
-          <BeatLoader color={"#a5b4fc"} loading={loading} size={50} />
+          <BeatLoader color={"#a5b4fc"} loading={loading} size={25} />
         </div>
       )}
     </div>
