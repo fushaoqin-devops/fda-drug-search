@@ -209,48 +209,52 @@ const SearchBar = () => {
               );
             })}
           </ul>
-          <div className="flex justify-center">
-            <nav>
-              <ul className="list-style-none flex">
-                <li>
-                  <button
-                    className="relative block cursor-pointer rounded-full border-0 bg-transparent py-1 px-3 text-gray-800 outline-none transition-all duration-300 hover:text-gray-800 focus:shadow-none disabled:cursor-default disabled:text-gray-100"
-                    onClick={handlePageDown}
-                    disabled={pageIdx == 1}
-                  >
-                    <span aria-hidden="true">&laquo;</span>
-                  </button>
-                </li>
-                {suggestions.map((list, id) => {
-                  return (
-                    <li key={id}>
-                      <button
-                        className={`relative block cursor-pointer rounded-full border-0 py-1 px-3 outline-none transition-all duration-300 focus:shadow-none ${
-                          id + 1 === pageIdx
-                            ? "bg-indigo-400 text-white hover:bg-indigo-500 hover:text-white"
-                            : "bg-transparent text-gray-800 hover:bg-gray-200 hover:text-gray-800"
-                        }`}
-                        onClick={() => {
-                          handlePagination(id + 1);
-                        }}
-                      >
-                        {id + 1}
-                      </button>
-                    </li>
-                  );
-                })}
-                <li>
-                  <button
-                    className="relative block cursor-pointer rounded-full border-0 bg-transparent py-1 px-3 text-gray-800 outline-none transition-all duration-300 hover:text-gray-800 focus:shadow-none disabled:cursor-default disabled:text-gray-100"
-                    onClick={handlePageUp}
-                    disabled={pageIdx >= suggestions.length}
-                  >
-                    <span aria-hidden="true">&raquo;</span>
-                  </button>
-                </li>
-              </ul>
-            </nav>
-          </div>
+          {suggestions.length > 1 ? (
+            <div className="flex justify-center">
+              <nav>
+                <ul className="list-style-none flex">
+                  <li>
+                    <button
+                      className="relative block cursor-pointer rounded-full border-0 bg-transparent py-1 px-3 text-gray-800 outline-none transition-all duration-300 hover:text-gray-800 focus:shadow-none disabled:cursor-default disabled:text-gray-100"
+                      onClick={handlePageDown}
+                      disabled={pageIdx == 1}
+                    >
+                      <span aria-hidden="true">&laquo;</span>
+                    </button>
+                  </li>
+                  {suggestions.map((list, id) => {
+                    return (
+                      <li key={id}>
+                        <button
+                          className={`relative block cursor-pointer rounded-full border-0 py-1 px-3 outline-none transition-all duration-300 focus:shadow-none ${
+                            id + 1 === pageIdx
+                              ? "bg-indigo-400 text-white hover:bg-indigo-500 hover:text-white"
+                              : "bg-transparent text-gray-800 hover:bg-gray-200 hover:text-gray-800"
+                          }`}
+                          onClick={() => {
+                            handlePagination(id + 1);
+                          }}
+                        >
+                          {id + 1}
+                        </button>
+                      </li>
+                    );
+                  })}
+                  <li>
+                    <button
+                      className="relative block cursor-pointer rounded-full border-0 bg-transparent py-1 px-3 text-gray-800 outline-none transition-all duration-300 hover:text-gray-800 focus:shadow-none disabled:cursor-default disabled:text-gray-100"
+                      onClick={handlePageUp}
+                      disabled={pageIdx >= suggestions.length}
+                    >
+                      <span aria-hidden="true">&raquo;</span>
+                    </button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       ) : (
         <div className="flex h-[300px] items-center justify-center">
