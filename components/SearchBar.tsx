@@ -61,44 +61,69 @@ const SearchBar = () => {
           return data;
         });
       if (!token) continue;
-      const products: string[] = token.products.split(";");
+      var tokenProducts = token.products;
+      if (tokenProducts.charAt(tokenProducts.length - 1) === ";") {
+        tokenProducts = tokenProducts.substring(0, tokenProducts.length - 1);
+      }
+      const products: string[] = tokenProducts.split(";");
       const qtfidf =
         ((1 + Math.log10(1)) * Math.log10(VSM_SIZE * 1.0)) / products.length;
       qMagnitude += Math.pow(qtfidf, 2);
 
       for (const p of products) {
-        const tokenMagnitude = token.magnitude;
-        const productId = p.split(",")[0];
-        if (!productId) continue;
-        const productName = await fetch(`/api/product/${productId}`)
-          .then((res) => res.json())
-          .then((data) => data?.name);
-        const tokenWeight = parseFloat(p.split(",")[1]);
-        const score = (qtfidf * tokenWeight) / tokenMagnitude;
-        if (weightedProducts.has(productId)) {
-          weightedProducts.set(productId, {
-            name: productName,
-            score: weightedProducts.get(productId) + score,
-          });
-        } else {
-          weightedProducts.set(productId, { name: productName, score: score });
+        if (p !== "") {
+          const tokenMagnitude = token.magnitude;
+          const productId = p.split(",")[0];
+          if (!productId) continue;
+          const productName = await fetch(`/api/product/${productId}`)
+            .then((res) => res.json())
+            .then((data) => data?.name);
+          const tokenWeight = parseFloat(p.split(",")[1]);
+          const score = (qtfidf * tokenWeight) / tokenMagnitude;
+          if (productId === "21a4c1ce-6ed4-4a0e-90b9-e07ca8f3ec40") {
+            console.log("QTFIDF is: " + qtfidf);
+            console.log("TOKEN WEIGHT is: " + tokenWeight);
+            console.log("TOKEN MAG is: " + tokenMagnitude);
+            console.log("Score: " + score);
+            console.log("Name: " + productName);
+          }
+          if (weightedProducts.has(productId)) {
+            const prevScore = weightedProducts.get(productId).score;
+            if (productId === "21a4c1ce-6ed4-4a0e-90b9-e07ca8f3ec40") {
+              console.log("Prev: " + JSON.stringify(prevScore));
+            }
+            weightedProducts.set(productId, {
+              name: productName,
+              score: prevScore + score,
+            });
+          } else {
+            weightedProducts.set(productId, {
+              name: productName,
+              score: score,
+            });
+          }
         }
       }
     }
+    console.log(weightedProducts);
     const suggestionList: Suggestion[] = [];
     if (weightedProducts.size == 0) {
       editDistance();
     }
     qMagnitude = Math.sqrt(qMagnitude);
     weightedProducts.forEach((value, key) => {
-      suggestionList.push({ id: key, name: value.name, score: value.score });
+      suggestionList.push({
+        id: key,
+        name: value.name,
+        score: value.score / qMagnitude,
+      });
     });
     // If cosine similarity is the same, sort by length of name
     suggestionList.sort((a, b) => {
       if (a.score === b.score) {
         return a.name.length > b.name.length ? 1 : -1;
       } else {
-        return a.score > b.score ? 1 : -1;
+        return a.score > b.score ? -1 : 1;
       }
     });
 
