@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 import BeatLoader from "react-spinners/BeatLoader";
 
 const VSM_SIZE = 5693;
@@ -91,12 +92,19 @@ const SearchBar = () => {
     weightedProducts.forEach((value, key) => {
       suggestionList.push({ id: key, name: value.name, score: value.score });
     });
+    // If cosine similarity is the same, sort by length of name
+    suggestionList.sort((a, b) => {
+      if (a.score === b.score) {
+        return a.name.length > b.name.length ? 1 : -1;
+      } else {
+        return a.score > b.score ? 1 : -1;
+      }
+    });
 
     setSuggestions(suggestionList);
   };
 
   const editDistance = async () => {
-    console.log(input);
     const res = await fetch(`api/product/editDistance`, {
       method: "POST",
       headers: {
@@ -104,25 +112,30 @@ const SearchBar = () => {
       },
       body: JSON.stringify({ qString: input }),
     }).then((res) => res.json());
-    if (res) {
+    if (res && res.length > 0) {
       setShowCloseMatch(true);
       setCloseMatch(res);
+    } else {
+      toast.error("Could not find any result. Please try another input");
     }
   };
 
   return (
     <div className="flex-col items-center justify-center">
       {showCloseMatch && closeMatch.length > 0 ? (
-        <div className="mb-50 m-auto w-1/3">
+        <div className="m-auto w-1/3">
           <ul>
             Did you mean:
             {closeMatch.map((match, idx) => {
               return (
-                <Link key={idx} href={`/product/${match.id}`} passHref>
-                  <div className="red inline-block cursor-pointer pl-2 text-red-500 underline">
-                    {idx > 0 ? "," : ""} {match.name}
-                  </div>
-                </Link>
+                <>
+                  {idx > 0 ? "," : ""}
+                  <Link key={idx} href={`/product/${match.id}`} passHref>
+                    <div className="red inline-block cursor-pointer pl-2 text-red-500 underline decoration-transparent hover:decoration-inherit">
+                      {match.name}
+                    </div>
+                  </Link>
+                </>
               );
             })}
             ?
@@ -161,14 +174,14 @@ const SearchBar = () => {
         </div>
       </div>
       {showSuggestions && suggestions.length > 0 ? (
-        <div className="mb-50 m-auto w-1/3">
+        <div className="m-auto mt-5 block w-1/2 rounded-lg bg-zinc-50 p-6 shadow-lg">
           <ul>
             {suggestions.map((suggestion, idx) => {
               return (
                 <Link key={idx} href={`/product/${suggestion.id}`} passHref>
                   <li
                     key={idx}
-                    className="cursor-pointer py-2 px-3 text-xs text-slate-900 hover:bg-blue-50"
+                    className="cursor-pointer rounded-md py-2 px-3 text-xs text-slate-900 underline decoration-transparent transition duration-300 ease-in-out hover:bg-indigo-100 hover:decoration-inherit"
                   >
                     {suggestion.name}
                   </li>
