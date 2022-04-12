@@ -10,7 +10,9 @@
     "format": "prettier --write ."
   },
   "dependencies": {
+    "@types/lodash": "4.14.181",
     "@types/nprogress": "0.2.0",
+    "lodash": "4.17.21",
     "mongoose": "6.2.9",
     "next": "12.1.2",
     "next-themes": "^0.0.15",
