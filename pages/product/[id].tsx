@@ -191,7 +191,7 @@ export default function Product({ p }: MyProps) {
                       alt=""
                     ></Image>
                   </div>
-                  {value.split("~")[1].length > 200 ? (
+                  {value.split("~")[1]?.length > 200 ? (
                     <div
                       className="flex cursor-pointer text-sm text-gray-400"
                       onClick={() => handleCollapse(idx)}
