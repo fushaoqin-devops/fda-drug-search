@@ -40,7 +40,7 @@ export default function Product({ p }: MyProps) {
   };
 
   const getFormattedReview = (review: string) => {
-    if (review.length > 200) {
+    if (review?.length > 200) {
       review = review.substring(0, 200);
       review += "...";
     }
@@ -191,7 +191,7 @@ export default function Product({ p }: MyProps) {
                       alt=""
                     ></Image>
                   </div>
-                  {value.split("~")[1].length > 200 ? (
+                  {value.split("~")[1]?.length > 200 ? (
                     <div
                       className="flex cursor-pointer text-sm text-gray-400"
                       onClick={() => handleCollapse(idx)}
