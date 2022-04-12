@@ -235,7 +235,7 @@ export async function getServerSideProps({ query }: GetServerSidePropsContext) {
   const product = await fetch(`${API_URL}/product/${id}`)
     .then((res) => res.json())
     .then((data) => data);
-  const allReviews = product.review?.replaceAll("&#039;", "'");
+  const allReviews = decodeURI(product.review);
   const reviews = allReviews?.split(";");
   const ingredients = product.ingredients.split(";");
   const ingredientList = [];
