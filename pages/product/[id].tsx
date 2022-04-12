@@ -38,13 +38,13 @@ export default function Product({ p }: MyProps) {
   };
 
   const formatDate = (dateString: string) => {
-    dateString = dateString.replaceAll("-", " ");
+    dateString = dateString?.replaceAll("-", " ");
     const formattedDate = new Date(Date.parse(dateString));
     return formattedDate.toLocaleDateString("en-US");
   };
 
   const getFormattedReview = (review: string) => {
-    if (review.length > 200) {
+    if (review?.length > 200) {
       review = review.substring(0, 200);
       review += "...";
     }
@@ -94,7 +94,7 @@ export default function Product({ p }: MyProps) {
               <div key={idx}>
                 <div className="m-3 flex justify-center font-mono text-lg">
                   {" "}
-                  Condition: {value.split("~")[0].replaceAll('"', "")}
+                  Condition: {value.split("~")[0]?.replaceAll('"', "")}
                 </div>
                 <div className="m-3 block rounded-lg bg-white p-6 shadow-lg">
                   <ul className="mb-2 flex">
@@ -221,7 +221,7 @@ export default function Product({ p }: MyProps) {
                       height="25px"
                       alt=""
                     ></Image>
-                    {value.split("~")[4].replaceAll('"', "")}
+                    {value.split("~")[4]?.replaceAll('"', "")}
                   </div>
                 </div>
               </div>
