@@ -1,6 +1,5 @@
-import { GetServerSideProps } from "next";
+import { GetServerSidePropsContext } from "next";
 import Image from "next/image";
-import { ParsedUrlQuery } from "querystring";
 import { useState } from "react";
 
 interface Product {
@@ -16,10 +15,6 @@ interface Ingredient {
 
 interface MyProps {
   p: Product;
-}
-
-interface Params extends ParsedUrlQuery {
-  id: string;
 }
 
 const API_URL = `${process.env.BASE_URL}/api`;
@@ -235,10 +230,8 @@ export default function Product({ p }: MyProps) {
   );
 }
 
-export const getServerSideProps: GetServerSideProps<MyProps, Params> = async (
-  context
-) => {
-  const { id } = context.params!;
+export async function getServerSideProps({ query }: GetServerSidePropsContext) {
+  const { id } = query;
   const product = await fetch(`${API_URL}/product/${id}`)
     .then((res) => res.json())
     .then((data) => data);
@@ -259,7 +252,7 @@ export const getServerSideProps: GetServerSideProps<MyProps, Params> = async (
       p,
     },
   };
-};
+}
 
 // export const getStaticPaths: GetStaticPaths<Params> = async () => {
 //   const pidList = await fetch(`${API_URL}/product`).then((res) => res.json());
