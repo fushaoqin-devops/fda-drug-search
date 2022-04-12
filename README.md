@@ -16,6 +16,8 @@
 
 ## Search Functionality
 
+- Database are built from FDA Orange Book dataset (https://www.fda.gov/drugs/drug-approvals-and-databases/approved-drug-products-therapeutic-equivalence-evaluations-orange-book)
+  and UCI ML Drug Review dataset (https://www.kaggle.com/datasets/jessicali9530/kuc-hackathon-winter-2018)
 - Used Vector Space Model for each token of the drug name
 - Each token's weight are extracted as a vector, then multiplied and normalized with query
 - Restuls are sorted in cosine similarity from high to low, with pageinated result (10 per page)
@@ -24,5 +26,5 @@
 - Results are ranked based on the number of edit distance, from low to high
 - Once user confirms on a search result, direct to the drug information page
 - Uses openFDA drug api endpoint (https://open.fda.gov/apis/drug/label/) to retrieve relevant drug information
-- Uses UCI ML Drug Review dataset (https://www.kaggle.com/datasets/jessicali9530/kuc-hackathon-winter-2018) for drug reviews
+- Uses UCI ML Drug Review dataset for drug reviews
 - Uses inverted index on drug ingredients to retrieve other drugs that have the exact same active ingredients
