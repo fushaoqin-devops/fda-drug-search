@@ -1,5 +1,6 @@
-import { GetServerSidePropsContext } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import Image from "next/image";
+import { ParsedUrlQuery } from "querystring";
 import { useState } from "react";
 
 interface Product {
@@ -15,6 +16,10 @@ interface Ingredient {
 
 interface MyProps {
   p: Product;
+}
+
+interface Params extends ParsedUrlQuery {
+  id: string;
 }
 
 const API_URL = `${process.env.BASE_URL}/api`;
@@ -230,22 +235,19 @@ export default function Product({ p }: MyProps) {
   );
 }
 
-export async function getServerSideProps({ query }: GetServerSidePropsContext) {
-  const { id } = query;
+export const getStaticProps: GetStaticProps<MyProps, Params> = async (
+  context
+) => {
+  const { id } = context.params!;
   const product = await fetch(`${API_URL}/product/${id}`)
     .then((res) => res.json())
     .then((data) => data);
   const reviews = product?.review?.split("_");
   const ingredients = product?.ingredients?.split(";");
-  const ingredientList = [];
-  for (const ingredientID of ingredients) {
-    if (ingredientID !== "") {
-      const ingredient = await fetch(
-        `${API_URL}/ingredient/${ingredientID}`
-      ).then((res) => res.json());
-      ingredientList.push({ id: ingredientID, name: ingredient.name });
-    }
-  }
+  const queryString = ingredients.join("/");
+  const ingredientList = await fetch(
+    `${API_URL}/ingredient/${queryString}`
+  ).then((res) => res.json());
   const p = {
     name: product.name,
     reviews: reviews[0] === "null" ? null : reviews,
@@ -256,17 +258,17 @@ export async function getServerSideProps({ query }: GetServerSidePropsContext) {
       p,
     },
   };
-}
+};
 
-// export const getStaticPaths: GetStaticPaths<Params> = async () => {
-//   const pidList = await fetch(`${API_URL}/product`).then((res) => res.json());
-//   const paths = pidList.map((pid: string) => ({
-//     params: {
-//       id: pid,
-//     },
-//   }));
-//   return {
-//     paths,
-//     fallback: false,
-//   };
-// };
+export const getStaticPaths: GetStaticPaths<Params> = async () => {
+  const pidList = await fetch(`${API_URL}/product`).then((res) => res.json());
+  const paths = pidList.map((pid: string) => ({
+    params: {
+      id: pid,
+    },
+  }));
+  return {
+    paths,
+    fallback: false,
+  };
+};
