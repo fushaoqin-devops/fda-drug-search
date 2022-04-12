@@ -43,7 +43,7 @@ const Home: NextPage = () => {
         </button>
       </div>
       <h1 className="py-24 text-center text-6xl font-bold tracking-tight text-slate-900 dark:text-gray-200">
-        Affordable FDA Drug Alternative
+        FDA Drug Alternative
       </h1>
       <div className="mx-auto max-w-7xl">
         <SearchBar />
