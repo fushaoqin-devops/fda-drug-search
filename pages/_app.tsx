@@ -4,6 +4,7 @@ import Head from "next/head";
 import Router from "next/router";
 import NProgress from "nprogress";
 import { useState } from "react";
+import { Toaster } from "react-hot-toast";
 import { RingLoader } from "react-spinners";
 import "../styles/globals.css";
 import "../styles/nprogress.css";
@@ -37,6 +38,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       <ThemeProvider attribute="class" enableSystem={false}>
+        <div>
+          <Toaster />
+        </div>
         {pageLoading ? (
           <div className="flex h-screen items-center justify-center bg-gray-200 dark:bg-slate-900">
             <div className="flex flex-col">

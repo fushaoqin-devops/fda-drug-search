@@ -45,7 +45,9 @@ const Home: NextPage = () => {
       <h1 className="py-24 text-center text-6xl font-bold tracking-tight text-slate-900 dark:text-gray-200">
         Affordable FDA Drug Alternative
       </h1>
-      <SearchBar />
+      <div className="mx-auto max-w-7xl">
+        <SearchBar />
+      </div>
     </div>
   );
 };
