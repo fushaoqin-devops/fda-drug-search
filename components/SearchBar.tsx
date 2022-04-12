@@ -80,17 +80,9 @@ const SearchBar = () => {
             .then((data) => data?.name);
           const tokenWeight = parseFloat(p.split(",")[1]);
           const score = (qtfidf * tokenWeight) / tokenMagnitude;
-          if (productId === "21a4c1ce-6ed4-4a0e-90b9-e07ca8f3ec40") {
-            console.log("QTFIDF is: " + qtfidf);
-            console.log("TOKEN WEIGHT is: " + tokenWeight);
-            console.log("TOKEN MAG is: " + tokenMagnitude);
-            console.log("Score: " + score);
-            console.log("Name: " + productName);
-          }
           if (weightedProducts.has(productId)) {
             const prevScore = weightedProducts.get(productId).score;
             if (productId === "21a4c1ce-6ed4-4a0e-90b9-e07ca8f3ec40") {
-              console.log("Prev: " + JSON.stringify(prevScore));
             }
             weightedProducts.set(productId, {
               name: productName,
@@ -105,7 +97,6 @@ const SearchBar = () => {
         }
       }
     }
-    console.log(weightedProducts);
     const suggestionList: Suggestion[] = [];
     if (weightedProducts.size == 0) {
       editDistance();

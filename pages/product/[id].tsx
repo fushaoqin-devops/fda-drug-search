@@ -1,4 +1,4 @@
-import { GetStaticPaths, GetStaticProps } from "next";
+import { GetServerSideProps } from "next";
 import Image from "next/image";
 import { ParsedUrlQuery } from "querystring";
 import { useState } from "react";
@@ -18,11 +18,6 @@ interface MyProps {
   p: Product;
 }
 
-interface Review {
-  shrink: string;
-  full: string;
-}
-
 interface Params extends ParsedUrlQuery {
   id: string;
 }
@@ -36,7 +31,7 @@ const EMPTY =
 
 export default function Product({ p }: MyProps) {
   const [collapseIdx, setCollapseIdx] = useState<boolean[]>(
-    new Array(p.reviews.length).fill(true)
+    new Array(p.reviews?.length).fill(true)
   );
   const handleChange = (id: string) => {
     // TODO: handle check boxes
@@ -53,7 +48,6 @@ export default function Product({ p }: MyProps) {
       review = review.substring(0, 200);
       review += "...";
     }
-    console.log(review);
     return review;
   };
 
@@ -241,7 +235,7 @@ export default function Product({ p }: MyProps) {
   );
 }
 
-export const getStaticProps: GetStaticProps<MyProps, Params> = async (
+export const getServerSideProps: GetServerSideProps<MyProps, Params> = async (
   context
 ) => {
   const { id } = context.params!;
@@ -267,15 +261,15 @@ export const getStaticProps: GetStaticProps<MyProps, Params> = async (
   };
 };
 
-export const getStaticPaths: GetStaticPaths<Params> = async () => {
-  const pidList = await fetch(`${API_URL}/product`).then((res) => res.json());
-  const paths = pidList.map((pid: string) => ({
-    params: {
-      id: pid,
-    },
-  }));
-  return {
-    paths,
-    fallback: false,
-  };
-};
+// export const getStaticPaths: GetStaticPaths<Params> = async () => {
+//   const pidList = await fetch(`${API_URL}/product`).then((res) => res.json());
+//   const paths = pidList.map((pid: string) => ({
+//     params: {
+//       id: pid,
+//     },
+//   }));
+//   return {
+//     paths,
+//     fallback: false,
+//   };
+// };
