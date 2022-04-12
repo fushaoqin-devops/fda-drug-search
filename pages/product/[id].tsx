@@ -238,15 +238,20 @@ export async function getServerSideProps({ query }: GetServerSidePropsContext) {
   const allReviews = product.review?.replaceAll("&#039;", "'");
   const reviews = allReviews?.split(";");
   const ingredients = product.ingredients.split(";");
-  const queryString = ingredients.join("/");
-  const ingredientList = await fetch(
-    `${API_URL}/ingredient/${queryString}`
-  ).then((res) => res.json());
+  const ingredientList = [];
+  for (const ingredientID of ingredients) {
+    if (ingredientID !== "") {
+      const ingredient = await fetch(
+        `${API_URL}/ingredient/${ingredientID}`
+      ).then((res) => res.json());
+      ingredientList.push({ id: ingredientID, name: ingredient.name });
+    }
+  }
   const p = {
     name: product.name,
     reviews: reviews[0] === "null" ? null : reviews,
     ingredients: ingredientList,
-  } as Product;
+  };
   return {
     props: {
       p,
