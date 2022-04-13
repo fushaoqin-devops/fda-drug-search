@@ -1,18 +1,8 @@
 ## Running Local Development
 
+- npm ci
 - npm run dev
 - [http://localhost:3000](http://localhost:3000).
-- Reference [Next.js Documentation](https://nextjs.org/docs) for features and API.
-
-## Dev Workflow
-
-- Checkout a local feature branch
-- git checkout -b <your_name>-<short_description>
-- Save changes and push to remote feature branch
-- git add . && git commit "commit description"
-- git push origin <feature-branch-name> (Add -u after push to set up upstream so can use git push later instead)
-- Create a PR
-- Merge if approved
 
 ## Search Functionality
 
@@ -28,3 +18,13 @@
 - Uses openFDA drug api endpoint (https://open.fda.gov/apis/drug/label/) to retrieve relevant drug information
 - Uses UCI ML Drug Review dataset for drug reviews
 - Uses inverted index on drug ingredients to retrieve other drugs that have the exact same active ingredients
+
+## Dev Workflow
+
+- Checkout a local feature branch
+- git checkout -b <your_name>-<short_description>
+- Save changes and push to remote feature branch
+- git add . && git commit "commit description"
+- git push origin <feature-branch-name> (Add -u after push to set up upstream so can use git push later instead)
+- Create a PR
+- Merge if approved
