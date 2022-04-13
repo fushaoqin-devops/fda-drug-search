@@ -10,7 +10,7 @@
   and UCI ML Drug Review dataset (https://www.kaggle.com/datasets/jessicali9530/kuc-hackathon-winter-2018)
 - Used Vector Space Model for each token of the drug name
 - Each token's weight are extracted as a vector, then multiplied and normalized with query
-- Restuls are sorted in cosine similarity from high to low, with pageinated result (10 per page)
+- Results are sorted in cosine similarity from high to low, with pageinated result (10 per page)
 - If no token from query string found in db, fall back to edit distance on wildcard search of product names
 - Query is run against all wildcard search returned names to calculat edit distance
 - Results are ranked based on the number of edit distance, from low to high
