@@ -22,14 +22,14 @@ const About = () => {
           <a href="https://github.com/fushaoqin-devops/fda-drug-search">
             <button
               type="button"
-              className="inline-block rounded-full bg-purple-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-purple-700 hover:shadow-lg focus:bg-purple-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-purple-800"
+              className="inline-block rounded-full bg-yellow-600 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out hover:bg-yellow-700 hover:shadow-lg focus:bg-yellow-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-yellow-800"
             >
               <Image src="/github.png" alt="" width={25} height={25} />
               <div>Find us on Github</div>
             </button>
           </a>
         </div>
-        <div className="border-radius-2 basis-1/2">
+        <div className="h-[500px] w-[700px] basis-1/2 overflow-hidden rounded-lg">
           <Image
             src="/medicine.jpg"
             alt="about image"
