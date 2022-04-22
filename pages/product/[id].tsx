@@ -111,7 +111,7 @@ export default function Product({ p }: MyProps) {
           <h4 className="mt-7 font-bold text-red-600">Warning:</h4>
           <p className="max-h-[300px] overflow-auto">{p.info?.warning}</p>
           <h4 className="mt-7 font-bold">Active Ingredients:</h4>
-          <p>
+          <div className="flex flex-col">
             {p.ingredients?.map((value, idx) => {
               return (
                 <span key={idx}>
@@ -122,7 +122,7 @@ export default function Product({ p }: MyProps) {
                 </span>
               );
             })}
-          </p>
+          </div>
           <button className="mt-6">
             <div className="flex align-middle" onClick={handleInvertedIndex}>
               <Image
