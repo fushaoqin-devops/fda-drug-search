@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import BeatLoader from "react-spinners/BeatLoader";
+import ReactTooltip from "react-tooltip";
 
 const VSM_SIZE = 5693;
 
@@ -158,6 +159,7 @@ const SearchBar = () => {
 
   return (
     <div className="flex-col items-center justify-center">
+      <ReactTooltip />
       {showCloseMatch && closeMatch.length > 0 ? (
         <div className="m-auto w-1/3">
           <ul>
@@ -189,6 +191,7 @@ const SearchBar = () => {
             onChange={onChange}
             onKeyUp={filterSuggestion}
             value={input}
+            data-tip="Enter drug name below"
           ></input>
           <button
             className="btn-search btn inline-block flex items-center rounded bg-indigo-500 px-6 py-2.5 text-xs font-medium uppercase leading-tight text-white shadow-md transition duration-150 ease-in-out  hover:bg-indigo-700 hover:shadow-lg focus:bg-indigo-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg disabled:opacity-50 dark:bg-indigo-300"

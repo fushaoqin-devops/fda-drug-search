@@ -27,7 +27,8 @@ const Home: NextPage = () => {
         <title>Home - FDA Drug Alternative</title>
         <meta name="description" content="FDA drug search engine" />
       </Head>
-      <div className="flex w-full justify-end">
+      <div className="flex w-full items-center justify-end font-mono">
+        <Link href="/about">About Us</Link>
         <button
           aria-label="Toggle Dark Mode"
           type="button"
