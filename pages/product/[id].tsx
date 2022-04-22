@@ -99,17 +99,17 @@ export default function Product({ p }: MyProps) {
 
   return (
     <div className="max-w-8xl flex h-screen">
-      <div className={`${p.reviews === null ? "w-full" : "basis-3/4"}`}>
-        <div className="h-screen rounded-lg bg-gray-100 p-6 text-gray-700 shadow-lg">
+      <div className={`${p.reviews === null ? "w-full" : "basis-3/4"} h-full`}>
+        <div className="h-full rounded-lg bg-gray-100 p-6 text-gray-700 shadow-lg">
           <h2 className="mb-5 text-3xl font-semibold">
             {p.name.toUpperCase()}
           </h2>
           <p>{p.info?.purpose}</p>
           <hr className="my-6 border-gray-300" />
           <h4 className="mt-4 font-bold">Usage:</h4>
-          <p>{p.info?.usage}</p>
+          <p className="max-h-[300px] overflow-auto">{p.info?.usage}</p>
           <h4 className="mt-7 font-bold text-red-600">Warning:</h4>
-          <p>{p.info?.warning}</p>
+          <p className="max-h-[300px] overflow-auto">{p.info?.warning}</p>
           <h4 className="mt-7 font-bold">Active Ingredients:</h4>
           <p>
             {p.ingredients?.map((value, idx) => {
